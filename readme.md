@@ -1,6 +1,6 @@
 # mvn-download-wsdl
 
-This is a Maven Pluging to download a WSDL file and all ist XSD files, storing them together in one directory and change the Imports in the WSDL file accordingly.
+This is a Maven Plugin to download a WSDL file and all its XSD schema files, storing them together in one directory and change the imports in the WSDL file accordingly.
 
 # Configuration
 
@@ -10,7 +10,7 @@ This is a Maven Pluging to download a WSDL file and all ist XSD files, storing t
 <plugin>
     <groupId>com.nilscoding.maven</groupId>
     <artifactId>mvn-download-wsdl</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <configuration>
         <wsdlLocation>https://yourserver/someservice/someservice?wsdl</wsdlLocation>
         <folder>${basedir}/src/main/resources/META-INF/wsdl/</folder>
@@ -29,18 +29,20 @@ This is a Maven Pluging to download a WSDL file and all ist XSD files, storing t
 
 ## Details
 
-The configuration takes three parameters:
-1. wsdlLocation: the HTTP/HTTPS location of the WSDL file
-2. folder: the target directory to write all downloaded files to
-3. basename: the base name for the output files
+The configuration takes the following parameters:
+1. `wsdlLocation` the HTTP/HTTPS location of the WSDL file
+2. `folder` the target directory to write all downloaded files to
+3. `basename` the base name for the output files
+4. `downloaderClass` _(optional)_ class name of `IDownloader` implementation to use
+5. `downloaderOptions` _(optional)_ options for downloader (format is implementation-dependent)
 
 ### wsdlLocation
 
-This parameter references the URL location of the WSDL file to download. It must be a HTTP or HTTPS url, other protocols (e.g. local file) are currently not supported.
+This parameter references the URL location of the WSDL file to download. It must be an HTTP or HTTPS url, other protocols (e.g. local file) are currently not supported.
 
-Internally okhttp3 is used for downloading. It is configured to ignore SSL certificate errors, so on the one hand you can use locations with self-signed certificates, but on the our hand any certificate is accepted, even "evil" ones.
+Internally okhttp3 is used for downloading. It is configured to ignore SSL certificate errors, so on the one hand you can use locations with self-signed certificates, but on the other hand any certificate is accepted, even "evil" ones.
 
-As of version 1.0.0 of this plugin, no proxy servers are supported, so the WSDL must be reachable directly. Also, the location must not be protected (e.g. no basic auth).
+Since version 1.1.0 the default downloader supports proxy configuration and authorization.
 
 ### folder
 
@@ -71,9 +73,39 @@ Taking the example above, this files will be written, assuming that the WSDL fil
 
 The schema files will be named with a counting number, beginning at 0. The original schema file name from the WSDL file will be ignored and replaced by this name.
 
+### downloaderClass
+
+Class name of `IDownloader` implementation. Will be created via reflection. Class must be reachable by build process and have a parameterless constructor.
+
+A new instance will be created for WSDL download and then for each XSD download, too.
+
+If options are needed, the can be configured using the `downloaderOptions` parameter. Implementation must parse the options string itself.
+
+### downloaderOptions
+
+Options for downloader implementation, so the format is implementation-dependent.
+
+For the default downloader (`OkHttp3Downloader`) the format is:
+`key1=value1;key2=value2;key3=value3`
+
+And the following options are supported by the default downloader:
+
+| Key       | Value                                                                      |
+|-----------|----------------------------------------------------------------------------|
+| proxyHost | HTTP proxy host _(optional)_                                               |
+| proxyPort | HTTP proxy port _(optional)_                                               |
+| authType  | Authentication type _(optional)_: `none`, `header`, `basic`                |
+| authValue | Authentication header value, _optional_, only for type `header` or `basic` |
+| authUser  | Authentication user, _optional_, only for type `basic`                     |
+| authPass  | Authentication password, _optional_, only for type `basic`                 |
+
+If header-based authentication should be used, the full header value of `Authorization` header must be given in `authValue`.
+
+If basic authentication `basic` should be used, the pre-defined authentication (result of `base64(username + ':' + password)`) can be provided as `authValue`, otherwise `authUser` and `authPass` must be given. The needed header value prefix `Basic` will be added automatically and a preemptive authorization is done, so the first request contains the authentication infos.
+
 # Usage
 
-This plugin is not hosted on any official Maven repository. The recommended way to use it is to clone this Github repository and install the plugin locally (with `mvn install`). This makes it available to other build processes.
+The current version of this plugin is not hosted on any official Maven repository. The recommended way to use it is to clone this Github repository and install the plugin locally (with `mvn install`). This makes it available to other build processes.
 
 If you have an internal Maven repository server like Nexus, you may upload it there.
 

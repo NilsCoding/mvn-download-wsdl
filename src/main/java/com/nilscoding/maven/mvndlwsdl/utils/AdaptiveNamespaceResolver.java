@@ -1,22 +1,29 @@
 package com.nilscoding.maven.mvndlwsdl.utils;
 
-import java.util.Iterator;
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
 import org.w3c.dom.Document;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
+import java.util.Iterator;
+
 /**
- * adaptive Namespace Resolver, taken from: https://howtodoinjava.com/xml/xpath-namespace-resolution-example/
+ * Adaptive Namespace Resolver. Taken from: https://howtodoinjava.com/xml/xpath-namespace-resolution-example/
  * @author Lokesh Gupta
  */
-public class NamespaceResolver implements NamespaceContext
-{
+public final class AdaptiveNamespaceResolver implements NamespaceContext {
+    /**
+     * Source document.
+     */
     private final Document sourceDocument;
- 
-    public NamespaceResolver(Document document) {
+
+    /**
+     * Creates a new instance with given document.
+     * @param document document
+     */
+    public AdaptiveNamespaceResolver(Document document) {
         sourceDocument = document;
     }
- 
+
     @Override
     public String getNamespaceURI(String prefix) {
         if (prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
@@ -25,16 +32,16 @@ public class NamespaceResolver implements NamespaceContext
             return sourceDocument.lookupNamespaceURI(prefix);
         }
     }
- 
+
     @Override
     public String getPrefix(String namespaceURI) {
         return sourceDocument.lookupPrefix(namespaceURI);
     }
- 
+
     @SuppressWarnings("rawtypes")
     @Override
-    public Iterator getPrefixes(String namespaceURI) {
+    public Iterator<String> getPrefixes(String namespaceURI) {
         return null;
     }
-    
+
 }

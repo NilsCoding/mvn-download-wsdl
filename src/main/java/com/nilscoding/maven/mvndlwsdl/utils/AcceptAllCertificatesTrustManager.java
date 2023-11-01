@@ -1,17 +1,20 @@
 package com.nilscoding.maven.mvndlwsdl.utils;
 
+import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import javax.net.ssl.X509TrustManager;
 
 /**
- * Trust Manager to accept all certificates
+ * Trust Manager to accept all certificates.
  * @author NilsCoding
  */
-public class AcceptAllCertificatesTrustManager implements X509TrustManager {
+public final class AcceptAllCertificatesTrustManager implements X509TrustManager {
 
+    /**
+     * Instance.
+     */
     public static final AcceptAllCertificatesTrustManager INSTANCE = new AcceptAllCertificatesTrustManager();
-    
+
     @Override
     public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {
     }
@@ -24,5 +27,5 @@ public class AcceptAllCertificatesTrustManager implements X509TrustManager {
     public X509Certificate[] getAcceptedIssuers() {
         return new X509Certificate[0];
     }
-    
+
 }
