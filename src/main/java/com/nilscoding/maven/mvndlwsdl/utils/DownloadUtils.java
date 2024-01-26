@@ -20,22 +20,23 @@ public final class DownloadUtils {
      * @return URL content as string or null
      */
     public static String download(String url, Log log, String downloaderClass, String downloaderOptions) {
+        IDownloader downloaderImpl = null;
         try {
-            IDownloader downloaderImpl = null;
             if (StringUtils.isEmpty(downloaderClass) == false) {
                 Class<?> clazz = Class.forName(downloaderClass);
                 Object downloaderImplObj = clazz.getDeclaredConstructor().newInstance();
                 if (downloaderImplObj instanceof IDownloader) {
                     downloaderImpl = (IDownloader) downloaderImplObj;
                 }
-            } else {
-                downloaderImpl = new OkHttp3Downloader();
             }
-            if (downloaderImpl != null) {
-                return downloaderImpl.downloadFile(url, log, downloaderOptions);
-            }
-            log.error("downloader '" + downloaderClass + "' not found");
-            return null;
+        } catch (Throwable th) {
+            log.warn("downloader '" + downloaderClass + "' not found, will use default");
+        }
+        if (downloaderImpl == null) {
+            downloaderImpl = new OkHttp3Downloader();
+        }
+        try {
+            return downloaderImpl.downloadFile(url, log, downloaderOptions);
         } catch (Throwable ex) {
             log.error("could not fetch file from '" + url + "': " + ex, ex);
             return null;

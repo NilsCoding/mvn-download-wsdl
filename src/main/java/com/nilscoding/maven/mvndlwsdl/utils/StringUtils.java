@@ -71,4 +71,25 @@ public final class StringUtils {
         }
     }
 
+    /**
+     * Formats an int value to String, adding leading zeros to match number of digits of related group size if needed.
+     * If the number of digits of the group size implies that the value needs leading zeros, then they'll be added.
+     * Example: a group size of 250 implies three digits, so formatting 7 becomes &quot;007&quot;.
+     * Negative values will be returned as a simple string.
+     * @param value     value to format
+     * @param groupSize group size to match
+     * @return formatted string
+     */
+    public static String formatLeadingZeros(int value, int groupSize) {
+        if (value < 0) {
+            return String.valueOf(value);
+        }
+        if (groupSize < 1) {
+            groupSize = 1;
+        }
+        int size = (int) Math.floor(Math.log10(groupSize)) + 1;
+        String format = "%0" + size + "d";
+        return String.format(format, value);
+    }
+
 }

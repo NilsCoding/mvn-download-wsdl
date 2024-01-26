@@ -1,7 +1,6 @@
 package com.nilscoding.maven.mvndlwsdl.utils;
 
 import org.w3c.dom.Document;
-
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import java.util.Iterator;

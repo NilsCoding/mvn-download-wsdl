@@ -113,7 +113,11 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See https://checkstyle.org/config_sizes.html -->
-        <module name="MethodLength"/>
+        <module name="MethodLength">
+            <!-- NilsCoding: don't count non-code lines, also allow more lines -->
+            <property name="countEmpty" value="false" />
+            <property name="max" value="1024" />
+        </module>
         <module name="ParameterNumber"/>
 
         <!-- Checks for whitespace                               -->

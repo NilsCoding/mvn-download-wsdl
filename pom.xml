@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.nilscoding.maven</groupId>
     <artifactId>mvn-download-wsdl</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>mvn-download-wsdl</name>
@@ -18,6 +18,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <mavenversion>3.6.0</mavenversion>
+        <mavenpluginhelperversion>3.11.0</mavenpluginhelperversion>
     </properties>
 
     <licenses>
@@ -44,12 +45,14 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>${mavenversion}</version>
+            <version>${mavenpluginhelperversion}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
             <version>${mavenversion}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -83,7 +86,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.12.1</version>
                 <configuration>
                     <compilerArgs>
                         <!--<arg>-verbose</arg>-->
@@ -107,7 +110,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.3</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -152,12 +155,15 @@
                     <configLocation>mvn-download-wsdl-checkstyle.xml</configLocation>
                     <failOnViolation>false</failOnViolation>
                     <failsOnError>false</failsOnError>
+                    <sourceDirectories>
+                        <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                    </sourceDirectories>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.5</version>
+                <version>3.5.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -167,7 +173,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.11.0</version>
                 <executions>
                     <execution>
                         <id>default-descriptor</id>
@@ -184,6 +190,10 @@
                         <phase>process-classes</phase>
                     </execution>
                 </executions>
+                <configuration>
+                    <goalPrefix>mvndlwsdl</goalPrefix>
+                    <helpPackageName>com.nilscoding.maven.mvndlwsdl.helpmojo</helpPackageName>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -196,6 +206,9 @@
                 <version>3.3.1</version>
                 <configuration>
                     <configLocation>mvn-download-wsdl-checkstyle.xml</configLocation>
+                    <sourceDirectories>
+                        <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                    </sourceDirectories>
                 </configuration>
             </plugin>
         </plugins>
