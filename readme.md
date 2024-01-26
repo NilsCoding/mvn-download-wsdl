@@ -10,7 +10,7 @@ This is a Maven Plugin to download a WSDL file and all its XSD schema files, sto
 <plugin>
     <groupId>com.nilscoding.maven</groupId>
     <artifactId>mvn-download-wsdl</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <configuration>
         <wsdlLocation>https://yourserver/someservice/someservice?wsdl</wsdlLocation>
         <folder>${basedir}/src/main/resources/META-INF/wsdl/</folder>
@@ -72,6 +72,8 @@ Taking the example above, this files will be written, assuming that the WSDL fil
 * someservice_1.xsd
 
 The schema files will be named with a counting number, beginning at 0. The original schema file name from the WSDL file will be ignored and replaced by this name.
+
+Since version 1.2.0 schema imports in schema files are also resolved and all cumulative files are fetched.
 
 ### downloaderClass
 
