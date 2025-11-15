@@ -10,7 +10,7 @@ This is a Maven Plugin to download a WSDL file and all its XSD schema files, sto
 <plugin>
     <groupId>com.nilscoding.maven</groupId>
     <artifactId>mvn-download-wsdl</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <configuration>
         <wsdlLocation>https://yourserver/someservice/someservice?wsdl</wsdlLocation>
         <folder>${basedir}/src/main/resources/META-INF/wsdl/</folder>
